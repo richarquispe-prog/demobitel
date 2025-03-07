@@ -943,7 +943,7 @@ const Conversaciones = () => {
 													<div className="media-body">
 														<div className="main-msg-wrapper right agent-bg">
 															<span className="label-bot">Chat Bot:</span>
-															Gracias. Ok. Hasta luego. Su opinión es muy importante para nosotros...
+															Su opinión es muy importante para nosotros. Lo invitamos a responder una breve encuesta que recibirá vía SMS. Gracias por llamar a Bitel.
 														</div>
 														<div>
 															<span>10:46 am</span> <Link to="#"><i className="icon ion-android-more-horizontal"></i></Link>
@@ -997,7 +997,7 @@ const Conversaciones = () => {
 												<h6 className="mb-3">Datos</h6>
 												<div className="d-flex">
 													<div>
-														<Link to="#" className="nav-link border rounded-pill chat-profile me-2" ><i className="fe fe-smile"></i></Link>
+														<Link to="#" className="nav-link border rounded-pill chat-profile me-2" ><i className="fe" >😊</i></Link>
 													</div>
 													<div className="ms-2">
 														<p className="fs-13 fw-semibold mb-0">Sentimiento</p>

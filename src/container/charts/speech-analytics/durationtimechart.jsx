@@ -113,14 +113,14 @@ export class DurationTimeChart extends Component {
     }
 
     processDurationData() {
-        const durations = speechData['Análisis de Conversaciones'].map(item => item.duracion);
+        const durations = speechData['Análisis de Conversaciones']
+            .map(item => item.duracion)
+            .filter(duration => duration > 0);
         
-
         const durationFrequency = durations.reduce((acc, curr) => {
             acc[curr] = (acc[curr] || 0) + 1;
             return acc;
         }, {});
-
 
         const sortedEntries = Object.entries(durationFrequency)
             .sort((a, b) => parseInt(a[0]) - parseInt(b[0]));

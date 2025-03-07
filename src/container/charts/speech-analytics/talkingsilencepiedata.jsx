@@ -6,7 +6,7 @@ export class TalkingSilencePieChart extends Component {
     constructor(props) {
         super(props);
 
-        // Process the speech data to calculate average tiempo_habla and tiempo_silencio
+     
         const { hablaPercentage, silencioPercentage } = this.processTalkingSilenceData();
 
         this.state = {

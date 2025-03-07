@@ -8,12 +8,21 @@ export class ConversationAnalysisPie extends Component {
 
         
         const conversationData = speechData["Análisis de Conversaciones"][0];
+        
+
+        const total = conversationData.tiempo_promedio_pausas + 
+                     conversationData.cambios_hablante + 
+                     conversationData.tiempo_respuesta;
+
+        const tiempoPausasPercent = (conversationData.tiempo_promedio_pausas / total) * 100;
+        const cambiosHablantePercent = (conversationData.cambios_hablante / total) * 100;
+        const tiempoRespuestaPercent = (conversationData.tiempo_respuesta / total) * 100;
 
         this.state = {
             series: [
-                conversationData.tiempo_promedio_pausas,
-                conversationData.cambios_hablante,
-                conversationData.tiempo_respuesta
+                tiempoPausasPercent,
+                cambiosHablantePercent,
+                tiempoRespuestaPercent
             ],
             options: {
                 chart: {
@@ -49,10 +58,45 @@ export class ConversationAnalysisPie extends Component {
                 dataLabels: {
                     enabled: true,
                     formatter: function(val, opts) {
-                        return opts.w.globals.labels[opts.seriesIndex];
+                        return val.toFixed(1) + '%';
+                    },
+                    textAnchor: 'start',
+                    distributed: true,
+                    style: {
+                        fontSize: '18px',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                        fontWeight: 'bold'
+                    },
+                    background: {
+                        enabled: false
                     },
                     dropShadow: {
                         enabled: false
+                    },
+                    position: function(val, opts) {
+                        if (opts.seriesIndex === 0) {
+                            return 'outside';
+                        }
+                        return 'center';
+                    },
+                    offset: function(val, opts) {
+                        if (opts.seriesIndex === 0) {
+                            return 20;
+                        }
+                        return 0;
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            offset: 0,
+                            minAngleToShowLabel: 10
+                        },
+                        customScale: 0.9,
+                        donut: {
+                            size: '65%'
+                        },
+                        offsetY: 0
                     }
                 },
                 tooltip: {
@@ -163,7 +207,13 @@ export class ConversationAnalysisDonut extends Component {
                     }
                 },
                 dataLabels: {
-                    enabled: false
+                    enabled: true,
+                    formatter: function(val, opts) {
+                        return val.toFixed(1) + '%';
+                    },
+                    dropShadow: {
+                        enabled: false
+                    }
                 },
                 plotOptions: {
                     pie: {

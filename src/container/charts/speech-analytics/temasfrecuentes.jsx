@@ -6,10 +6,9 @@ export class TemasFrecuentesChart extends Component {
     constructor(props) {
         super(props);
 
-        const topicFrequencyData = this.processTopicFrequencyData('todos');
+        const topicFrequencyData = this.processTopicFrequencyData();
 
         this.state = {
-            activeFilter: 'todos',
             series: [{
                 name: 'Frecuencia',
                 data: topicFrequencyData.frequencies
@@ -113,38 +112,13 @@ export class TemasFrecuentesChart extends Component {
     }
 
 
-    handleFilterChange = (filter) => {
-        this.setState({ activeFilter: filter }, () => {
-            this.updateChartData(filter);
-        });
-    }
 
 
-    updateChartData(filter) {
-        const topicFrequencyData = this.processTopicFrequencyData(filter);
-        
-        this.setState({
-            series: [{
-                name: 'Frecuencia',
-                data: topicFrequencyData.frequencies
-            }],
-            options: {
-                ...this.state.options,
-                xaxis: {
-                    ...this.state.options.xaxis,
-                    categories: topicFrequencyData.topics
-                }
-            }
-        });
-    }
-
-    processTopicFrequencyData(filter = 'todos') {
+    processTopicFrequencyData() {
         const temasPrincipales = speechData["Tema Principal"];
         
-        // Filter topics by role if needed
-        const filteredTopics = filter === 'todos' 
-            ? temasPrincipales 
-            : temasPrincipales.filter(item => item.rol === filter);
+        // Use all topics without filtering
+        const filteredTopics = temasPrincipales;
         
         // Sort topics by frequency in descending order
         const sortedTopics = [...filteredTopics].sort((a, b) => b.frecuencia - a.frecuencia);
@@ -159,58 +133,11 @@ export class TemasFrecuentesChart extends Component {
         };
     }
 
-    renderFilterButtons() {
-        const { activeFilter } = this.state;
-        const buttonStyle = {
-            padding: '2px 2px',
-            margin: '0 2px 2px 0',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 600,
-            border: '1px solid #6A8BFF',
-            transition: 'all 0.3s ease'
-        };
 
-        const activeStyle = {
-            ...buttonStyle,
-            backgroundColor: '#6A8BFF',
-            color: 'white'
-        };
-
-        const inactiveStyle = {
-            ...buttonStyle,
-            backgroundColor: 'white',
-            color: '#6A8BFF'
-        };
-
-        return (
-            <div style={{ display: 'flex', marginBottom: '20px' }}>
-                <button 
-                    style={activeFilter === 'todos' ? activeStyle : inactiveStyle}
-                    onClick={() => this.handleFilterChange('todos')}
-                >
-                    Todos
-                </button>
-                <button 
-                    style={activeFilter === 'agente' ? activeStyle : inactiveStyle}
-                    onClick={() => this.handleFilterChange('agente')}
-                >
-                    Agente
-                </button>
-                <button 
-                    style={activeFilter === 'cliente' ? activeStyle : inactiveStyle}
-                    onClick={() => this.handleFilterChange('cliente')}
-                >
-                    Cliente
-                </button>
-            </div>
-        );
-    }
 
     render() {
         return (
             <div>
-                {this.renderFilterButtons()}
                 <ReactApexChart options={this.state.options} series={this.state.series} type="bar" height={400} />
             </div>
         );
