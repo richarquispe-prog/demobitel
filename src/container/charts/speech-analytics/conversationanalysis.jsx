@@ -118,7 +118,7 @@ export class ConversationAnalysisDonut extends Component {
     constructor(props) {
         super(props);
 
-        // Calculate averages from all conversations
+ 
         const conversations = speechData["Análisis de Conversaciones"];
         let totalTiempoPausas = 0;
         let totalCambiosHablante = 0;

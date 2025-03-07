@@ -6,7 +6,7 @@ export class SentimentColumnChart extends Component {
     constructor(props) {
         super(props);
 
-        // Process the speech data to calculate sentiment percentages
+        
         const sentimentData = this.processSentimentData();
 
         this.state = {
@@ -88,7 +88,7 @@ export class SentimentColumnChart extends Component {
     }
 
     processSentimentData() {
-        // Initialize counters
+    
         const counts = {
             negative: 0,
             positive: 0,
@@ -128,7 +128,7 @@ export class EmotionColumnChart extends Component {
     constructor(props) {
         super(props);
 
-        // Process the speech data to count emotions
+        
         const emotionData = this.processEmotionData();
 
         this.state = {
@@ -233,7 +233,7 @@ export class EmotionColumnChart extends Component {
         const conversations = speechData["Análisis de Conversaciones"];
         const emotionMap = new Map();
         
-        // Count frequency of each emotion
+      
         conversations.forEach(conv => {
             const emotion = conv.emocion;
             if (emotion) {
@@ -241,7 +241,7 @@ export class EmotionColumnChart extends Component {
             }
         });
         
-        // Convert to array and sort by frequency
+       
         const emotionArray = Array.from(emotionMap, ([emotion, count]) => ({
             emotion,
             count,
@@ -250,14 +250,14 @@ export class EmotionColumnChart extends Component {
         
         emotionArray.sort((a, b) => b.count - a.count);
         
-        // Get top 6 emotions
+     
         const topEmotions = emotionArray.slice(0, 6);
         
-        // Calculate 'Otros' percentage
+    
         const otherEmotions = emotionArray.slice(6);
         const otherPercentage = otherEmotions.reduce((sum, item) => sum + item.percentage, 0);
         
-        // Prepare final data
+      
         const values = [...topEmotions.map(item => parseFloat(item.percentage.toFixed(1)))];
         if (otherPercentage > 0) {
             values.push(parseFloat(otherPercentage.toFixed(1)));

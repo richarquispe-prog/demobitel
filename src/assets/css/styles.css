@@ -71,7 +71,7 @@ License Details                    :   https://spruko.com/licenses-details
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900");
 :root {
   --body-bg-rgb: 245, 247, 255;
-  --primary-rgb:	56, 88, 249;
+  --primary-rgb:	230, 235, 255;
   --secondary-rgb:	121, 135, 161;
   --warning-rgb:	232, 178, 16;
   --info-rgb:	23, 162, 184;

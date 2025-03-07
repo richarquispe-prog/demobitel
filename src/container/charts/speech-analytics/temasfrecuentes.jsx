@@ -6,9 +6,10 @@ export class TemasFrecuentesChart extends Component {
     constructor(props) {
         super(props);
 
-        const topicFrequencyData = this.processTopicFrequencyData();
+        const topicFrequencyData = this.processTopicFrequencyData('todos');
 
         this.state = {
+            activeFilter: 'todos',
             series: [{
                 name: 'Frecuencia',
                 data: topicFrequencyData.frequencies
@@ -111,25 +112,46 @@ export class TemasFrecuentesChart extends Component {
         };
     }
 
-    processTopicFrequencyData() {
-        const conversations = speechData["Análisis de Conversaciones"];
+
+    handleFilterChange = (filter) => {
+        this.setState({ activeFilter: filter }, () => {
+            this.updateChartData(filter);
+        });
+    }
+
+
+    updateChartData(filter) {
+        const topicFrequencyData = this.processTopicFrequencyData(filter);
         
-        const topicMap = new Map();
-        
-        conversations.forEach(conv => {
-            const topic = conv.tema_principal;
-            if (topic) {
-                topicMap.set(topic, (topicMap.get(topic) || 0) + 1);
+        this.setState({
+            series: [{
+                name: 'Frecuencia',
+                data: topicFrequencyData.frequencies
+            }],
+            options: {
+                ...this.state.options,
+                xaxis: {
+                    ...this.state.options.xaxis,
+                    categories: topicFrequencyData.topics
+                }
             }
         });
+    }
+
+    processTopicFrequencyData(filter = 'todos') {
+        const temasPrincipales = speechData["Tema Principal"];
         
-        const topicArray = Array.from(topicMap, ([topic, freq]) => ({ topic, freq }));
-        const sortedTopics = topicArray.sort((a, b) => b.freq - a.freq);
+        // Filter topics by role if needed
+        const filteredTopics = filter === 'todos' 
+            ? temasPrincipales 
+            : temasPrincipales.filter(item => item.rol === filter);
         
-        const topTopics = sortedTopics.slice(0, 15);
+        // Sort topics by frequency in descending order
+        const sortedTopics = [...filteredTopics].sort((a, b) => b.frecuencia - a.frecuencia);
         
-        const topics = topTopics.map(item => item.topic);
-        const frequencies = topTopics.map(item => item.freq);
+        // Extract topic names and frequency values
+        const topics = sortedTopics.map(item => item.tema_principal);
+        const frequencies = sortedTopics.map(item => item.frecuencia);
         
         return {
             topics,
@@ -137,9 +159,60 @@ export class TemasFrecuentesChart extends Component {
         };
     }
 
+    renderFilterButtons() {
+        const { activeFilter } = this.state;
+        const buttonStyle = {
+            padding: '2px 2px',
+            margin: '0 2px 2px 0',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontWeight: 600,
+            border: '1px solid #6A8BFF',
+            transition: 'all 0.3s ease'
+        };
+
+        const activeStyle = {
+            ...buttonStyle,
+            backgroundColor: '#6A8BFF',
+            color: 'white'
+        };
+
+        const inactiveStyle = {
+            ...buttonStyle,
+            backgroundColor: 'white',
+            color: '#6A8BFF'
+        };
+
+        return (
+            <div style={{ display: 'flex', marginBottom: '20px' }}>
+                <button 
+                    style={activeFilter === 'todos' ? activeStyle : inactiveStyle}
+                    onClick={() => this.handleFilterChange('todos')}
+                >
+                    Todos
+                </button>
+                <button 
+                    style={activeFilter === 'agente' ? activeStyle : inactiveStyle}
+                    onClick={() => this.handleFilterChange('agente')}
+                >
+                    Agente
+                </button>
+                <button 
+                    style={activeFilter === 'cliente' ? activeStyle : inactiveStyle}
+                    onClick={() => this.handleFilterChange('cliente')}
+                >
+                    Cliente
+                </button>
+            </div>
+        );
+    }
+
     render() {
         return (
-            <ReactApexChart options={this.state.options} series={this.state.series} type="bar" height={400} />
+            <div>
+                {this.renderFilterButtons()}
+                <ReactApexChart options={this.state.options} series={this.state.series} type="bar" height={400} />
+            </div>
         );
     }
 }

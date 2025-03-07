@@ -383,12 +383,12 @@
           color: variables.$primary;
         }
         &:before {
-          content: "";
+          content: "hola";
           position: absolute;
-          inset-inline-start: 45%;
+          inset-inline-start: 30%;
           inset-inline-end: 0;
           inset-block-end: 0;
-          width: 20%;
+          width: 40%;
           height: 0.175rem;
           background-color: variables.$primary;
           border-radius: 50px;

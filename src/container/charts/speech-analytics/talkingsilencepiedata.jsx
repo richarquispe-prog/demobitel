@@ -68,10 +68,10 @@ export class TalkingSilencePieChart extends Component {
     }
 
     processTalkingSilenceData() {
-        // Get all conversations from the data
+
         const conversations = speechData["Análisis de Conversaciones"];
         
-        // Calculate the total tiempo_habla and tiempo_silencio across all conversations
+   
         let totalHabla = 0;
         let totalSilencio = 0;
         let totalDuration = 0;
@@ -82,7 +82,7 @@ export class TalkingSilencePieChart extends Component {
             totalDuration += conv.duracion;
         });
         
-        // Calculate percentages
+
         const hablaPercentage = (totalHabla / totalDuration) * 100;
         const silencioPercentage = (totalSilencio / totalDuration) * 100;
         

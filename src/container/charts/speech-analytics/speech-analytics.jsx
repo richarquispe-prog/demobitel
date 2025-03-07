@@ -23,15 +23,58 @@ const SpeechAnalytics = () => {
                         </Card.Header>
                         <Card.Body>
                             <Tab.Container defaultActiveKey="first">
-                                <Nav variant="pills" className="nav nav-tabs tab-style-2 nav-justified mb-3 d-sm-flex d-block" id="speechTab" role="tablist">
+                                <Nav variant="pills" className="nav nav-tabs speech-tab-style nav-justified mb-3 d-sm-flex d-block" id="speechTab" role="tablist" style={{
+                                    '--nav-link-active-width': '100%',
+                                    '--nav-link-active-height': '3px'
+                                }}>
                                     <Nav.Item>
-                                        <Nav.Link eventKey="first" id="dashboard-tab" type="button">Conversación</Nav.Link>
+                                     
+                                        <Nav.Link eventKey="first" id="dashboard-tab" type="button" style={{
+                                            position: 'relative',
+                                            ':after': {
+                                                content: '""',
+                                                position: 'absolute',
+                                                bottom: 0,
+                                                left: '50%',
+                                                transform: 'translateX(-50%)',
+                                                width: 'var(--nav-link-active-width)',
+                                                height: 'var(--nav-link-active-height)',
+                                                backgroundColor: '#6A8BFF',
+                                                transition: 'width 0.3s ease'
+                                            }
+                                        }}> <i></i> Conversación</Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item>
-                                        <Nav.Link eventKey="second" id="sentiment-tab" type="button">Sentimiento</Nav.Link>
+                                        <Nav.Link eventKey="second" id="sentiment-tab" type="button" style={{
+                                            position: 'relative',
+                                            ':after': {
+                                                content: '""',
+                                                position: 'absolute',
+                                                bottom: 0,
+                                                left: '50%',
+                                                transform: 'translateX(-50%)',
+                                                width: 'var(--nav-link-active-width)',
+                                                height: 'var(--nav-link-active-height)',
+                                                backgroundColor: '#6A8BFF',
+                                                transition: 'width 0.3s ease'
+                                            }
+                                        }}>Sentimiento</Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item>
-                                        <Nav.Link eventKey="third" id="words-tab" type="button">Preguntas frecuentes</Nav.Link>
+                                        <Nav.Link eventKey="third" id="words-tab" type="button" style={{
+                                            position: 'relative',
+                                            ':after': {
+                                                content: '""',
+                                                position: 'absolute',
+                                                bottom: 0,
+                                                left: '50%',
+                                                transform: 'translateX(-50%)',
+                                                width: 'var(--nav-link-active-width)',
+                                                height: 'var(--nav-link-active-height)',
+                                                backgroundColor: '#6A8BFF',
+                                                transition: 'width 0.3s ease'
+                                            }
+                                        }}>Preguntas frecuentes</Nav.Link>
                                     </Nav.Item>
                                 </Nav>
                                 <Tab.Content className="tab-content" id="speechTabContent">
@@ -53,7 +96,7 @@ const SpeechAnalytics = () => {
                                             <Col xl={6} className="mb-3">
                                                 <Card className="custom-card h-100" style={{ border: '1px solid #BDCBFF' }}>
                                                     <Card.Header>
-                                                        <Card.Title>Promedio de conversaciones por hora</Card.Title>
+                                                        <Card.Title>Promedio de conversaciones por minuto</Card.Title>
                                                     </Card.Header>
                                                     <Card.Body>
                                                         <div id="duration-time-chart" className="h-100">

@@ -6,13 +6,15 @@ export class FrequentQuestionsChart extends Component {
     constructor(props) {
         super(props);
 
-        // Process the speech data to get frequent questions
-        const questionFrequencyData = this.processQuestionFrequencyData();
+
+        const initialData = this.processQuestionFrequencyData('todos');
+        
 
         this.state = {
+            activeFilter: 'todos', 
             series: [{
                 name: 'Frecuencia',
-                data: questionFrequencyData.frequencies
+                data: initialData.frequencies
             }],
             options: {
                 chart: {
@@ -66,7 +68,7 @@ export class FrequentQuestionsChart extends Component {
                     colors: ['#fff']
                 },
                 xaxis: {
-                    categories: questionFrequencyData.questions,
+                    categories: initialData.questions,
                     labels: {
                         show: true,
                         style: {
@@ -113,36 +115,59 @@ export class FrequentQuestionsChart extends Component {
         };
     }
 
-    processQuestionFrequencyData() {
-        // Extraer las preguntas y sus frecuencias del JSON
-        const questionData = [];
+    // Handle filter change
+    handleFilterChange = (filter) => {
+        this.setState({ activeFilter: filter }, () => {
+            this.updateChartData(filter);
+        });
+    }
+
+    // Update chart data based on selected filter
+    updateChartData(filter) {
+        const questionFrequencyData = this.processQuestionFrequencyData(filter);
         
-        // Recorrer los datos para encontrar preguntas y frecuencias
-        for (let i = 1; i <= 200; i++) { // Limitamos a 200 para no procesar todo el archivo
-            const entry = Object.values(speechData).find(item => 
-                Array.isArray(item) && item.some(entry => 
-                    entry.id === i && entry.pregunta && entry.frecuencia
-                )
-            );
-            
-            if (entry) {
-                const question = entry.find(item => item.id === i);
-                if (question && question.pregunta && question.frecuencia) {
-                    questionData.push({
-                        pregunta: question.pregunta,
-                        frecuencia: question.frecuencia
-                    });
+        this.setState({
+            series: [{
+                name: 'Frecuencia',
+                data: questionFrequencyData.frequencies
+            }],
+            options: {
+                ...this.state.options,
+                xaxis: {
+                    ...this.state.options.xaxis,
+                    categories: questionFrequencyData.questions
                 }
             }
-        }
+        });
+    }
+
+    processQuestionFrequencyData(filter = 'todos') {
+
+        const questionData = [];
         
-        // Ordenar por frecuencia en orden descendente
+
+        const preguntasFrecuentes = speechData["Preguntas Frecuentes"] || [];
+        
+
+        const filteredQuestions = filter === 'todos' 
+            ? preguntasFrecuentes 
+            : preguntasFrecuentes.filter(item => item.rol === filter);
+        
+
+        filteredQuestions.forEach(question => {
+            if (question.pregunta && question.frecuencia) {
+                questionData.push({
+                    pregunta: question.pregunta,
+                    frecuencia: question.frecuencia
+                });
+            }
+        });
+
         const sortedData = questionData.sort((a, b) => b.frecuencia - a.frecuencia);
         
-        // Tomar las 15 preguntas más frecuentes
+
         const topQuestions = sortedData.slice(0, 15);
-        
-        // Extraer preguntas y frecuencias para el gráfico
+
         const questions = topQuestions.map(item => item.pregunta);
         const frequencies = topQuestions.map(item => item.frecuencia);
         
@@ -152,9 +177,60 @@ export class FrequentQuestionsChart extends Component {
         };
     }
 
+    renderFilterButtons() {
+        const { activeFilter } = this.state;
+        const buttonStyle = {
+            padding: '2px 2px',
+            margin: '0 2px 2px 0',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontWeight: 600,
+            border: '1px solid #6A8BFF',
+            transition: 'all 0.3s ease'
+        };
+
+        const activeStyle = {
+            ...buttonStyle,
+            backgroundColor: '#6A8BFF',
+            color: 'white'
+        };
+
+        const inactiveStyle = {
+            ...buttonStyle,
+            backgroundColor: 'white',
+            color: '#6A8BFF'
+        };
+
+        return (
+            <div style={{ display: 'flex', marginBottom: '20px' }}>
+                <button 
+                    style={activeFilter === 'todos' ? activeStyle : inactiveStyle}
+                    onClick={() => this.handleFilterChange('todos')}
+                >
+                    Todos
+                </button>
+                <button 
+                    style={activeFilter === 'agente' ? activeStyle : inactiveStyle}
+                    onClick={() => this.handleFilterChange('agente')}
+                >
+                    Agente
+                </button>
+                <button 
+                    style={activeFilter === 'cliente' ? activeStyle : inactiveStyle}
+                    onClick={() => this.handleFilterChange('cliente')}
+                >
+                    Cliente
+                </button>
+            </div>
+        );
+    }
+
     render() {
         return (
-            <ReactApexChart options={this.state.options} series={this.state.series} type="bar" height={400} />
+            <div>
+                {this.renderFilterButtons()}
+                <ReactApexChart options={this.state.options} series={this.state.series} type="bar" height={400} />
+            </div>
         );
     }
 }

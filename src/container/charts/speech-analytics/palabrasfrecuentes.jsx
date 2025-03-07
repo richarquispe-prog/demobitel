@@ -112,16 +112,15 @@ export class PalabrasFrecuentesChart extends Component {
     }
 
     processWordFrequencyData() {
-        // Get the word frequency data directly from the "Palabras Frecuentes" array
+
         const palabrasFrecuentes = speechData["Palabras Frecuentes"] || [];
         
-        // Filter out entries without palabra property
+  
         const validWords = palabrasFrecuentes.filter(item => item.palabra && item.frecuencia);
         
-        // Sort by frequency in descending order
+      
         const sortedWords = validWords.sort((a, b) => b.frecuencia - a.frecuencia);
-        
-        // Get top 15 words
+    
         const topWords = sortedWords.slice(0, 15);
         
         const words = topWords.map(item => item.palabra);

@@ -69,6 +69,9 @@ export class ConversationAnalysisChart extends Component {
                         labels: {
                             style: {
                                 colors: '#8e54e9',
+                            },
+                            formatter: function (value) {
+                                return parseFloat(value).toFixed(1);
                             }
                         },
                         title: {
@@ -91,6 +94,9 @@ export class ConversationAnalysisChart extends Component {
                         labels: {
                             style: {
                                 colors: '#4876e6',
+                            },
+                            formatter: function (value) {
+                                return parseFloat(value).toFixed(1);
                             }
                         },
                         title: {
@@ -131,6 +137,16 @@ export class ConversationAnalysisChart extends Component {
                         offsetY: 30,
                         offsetX: 60
                     },
+                    y: {
+                        formatter: function(value, { seriesIndex }) {
+                            
+                            if (seriesIndex === 0 || seriesIndex === 1) {
+                                return parseFloat(value).toFixed(1);
+                            }
+                            
+                            return value;
+                        }
+                    }
                 },
                 legend: {
                     horizontalAlign: 'left',
